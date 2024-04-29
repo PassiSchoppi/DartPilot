@@ -4,12 +4,21 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Game Screen'),
-      ),
       body: Center(
-        child: Text('This is the Game Screen'),
-      ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Pascal', // Replace with the name of the user
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('This is the Game Screen')
+          ],
+        )
+      )
     );
   }
 }
