@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'game.dart';
+import 'game_data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,19 +32,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  int _playerCount = 2; // Default player count
-  int _selectedGameMode = 301; // Default game mode
-  bool isSingle = true;
-  bool is301 = true;
-  int selectedPlayers = 1;
-
-  List<String> _playerNames =
-      List.generate(1, (index) => 'Spieler ${index + 1}');
+  GameData gameData = GameData();
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
     });
   }
 
@@ -76,14 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          selectedPlayers = playerCount;
-                          _playerNames = List.generate(selectedPlayers,
+                          gameData.numberOfPlayers = playerCount;
+                          gameData.playerNames = List.generate(gameData.numberOfPlayers,
                               (index) => 'Spieler ${index + 1}');
-                          print("$selectedPlayers");
+                          print("$gameData.selectedPlayers");
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: selectedPlayers == playerCount
+                        backgroundColor: gameData.numberOfPlayers == playerCount
                             ? Colors.blue[100]
                             : Colors.grey[300],
                         padding: EdgeInsets.all(15.0),
@@ -115,14 +107,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 10),
               Column(
-                children: _playerNames.map((name) {
+                children: gameData.playerNames.map((name) {
                   return TextFormField(
                     initialValue: name,
                     onChanged: (value) {
-                      _playerNames[_playerNames.indexOf(name)] = value;
+                      gameData.playerNames[gameData.playerNames.indexOf(name)] = value;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Spieler ${_playerNames.indexOf(name) + 1}',
+                      labelText: 'Spieler ${gameData.playerNames.indexOf(name) + 1}',
                     ),
                   );
                 }).toList(),
@@ -139,12 +131,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        is301 = true;
+                        gameData.is301 = true;
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          is301 ? Colors.blue[100] : Colors.grey[300],
+                          gameData.is301 ? Colors.blue[100] : Colors.grey[300],
                     ),
                     child: Text(
                       '301',
@@ -158,12 +150,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        is301 = false;
+                        gameData.is301 = false;
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          !is301 ? Colors.blue[100] : Colors.grey[300],
+                          !gameData.is301 ? Colors.blue[100] : Colors.grey[300],
                     ),
                     child: Text(
                       '501',
@@ -187,12 +179,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        isSingle = true;
+                        gameData.isSingle = true;
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          isSingle ? Colors.blue[100] : Colors.grey[300],
+                          gameData.isSingle ? Colors.blue[100] : Colors.grey[300],
                     ),
                     child: Text(
                       'Single',
@@ -206,12 +198,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        isSingle = false;
+                        gameData.isSingle = false;
                       });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          !isSingle ? Colors.blue[100] : Colors.grey[300],
+                          !gameData.isSingle ? Colors.blue[100] : Colors.grey[300],
                     ),
                     child: Text(
                       'Double',

@@ -109,7 +109,8 @@ class PointSelector extends StatelessWidget {
             crossAxisCount: 4, // Adjust the number of columns as needed
             childAspectRatio: 2,
             children: [
-              NumberButton(-2, text: 'x2', backgrounC: Colors.amberAccent.shade100),
+              NumberButton(-2,
+                  text: 'x2', backgrounC: Colors.amberAccent.shade100),
               NumberButton(-3, text: 'x3', backgrounC: Colors.orange.shade200),
               NumberButton(25, backgrounC: Colors.lightGreen.shade200),
               NumberButton(50, backgrounC: Colors.redAccent.shade100),

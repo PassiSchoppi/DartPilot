@@ -1,13 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'game_data.dart';
 
 class ActiveStats extends StatelessWidget {
+  GameData gameData = GameData();
+
   @override
   Widget build(BuildContext context) {
-    return const Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Padding(
         padding: EdgeInsets.only(top: 45, bottom: 15),
         child: Text(
-          'Pascal', // Replace with the name of the user
+          gameData.playerNames[gameData.activePlayer],
           style: TextStyle(
             fontSize: 48,
             fontWeight: FontWeight.bold,
