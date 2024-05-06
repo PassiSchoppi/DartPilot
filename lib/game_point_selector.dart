@@ -1,7 +1,12 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 enum DartThrow { A, B, C }
+int Wurf1 = 0;
+int Wurf2 = 0;
+int Wurf3 = 0;
 
 class SingleChoice extends StatefulWidget {
   const SingleChoice({super.key});
@@ -12,6 +17,9 @@ class SingleChoice extends StatefulWidget {
 
 class _SingleChoiceState extends State<SingleChoice> {
   DartThrow calendarView = DartThrow.A;
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +34,10 @@ class _SingleChoiceState extends State<SingleChoice> {
           textStyle: TextStyle(
             fontSize: 23,
           )),
-      segments: const <ButtonSegment<DartThrow>>[
-        ButtonSegment<DartThrow>(value: DartThrow.A, label: Text('60')),
-        ButtonSegment<DartThrow>(value: DartThrow.B, label: Text('20')),
-        ButtonSegment<DartThrow>(value: DartThrow.C, label: Text('14')),
+      segments: <ButtonSegment<DartThrow>>[
+        ButtonSegment<DartThrow>(value: DartThrow.A, label: Text(Wurf1.toString())),
+        ButtonSegment<DartThrow>(value: DartThrow.B, label: Text(Wurf2.toString())),
+        ButtonSegment<DartThrow>(value: DartThrow.C, label: Text(Wurf3.toString())),
       ],
       selected: <DartThrow>{calendarView},
       onSelectionChanged: (Set<DartThrow> newSelection) {
@@ -72,6 +80,11 @@ class NumberButton extends StatelessWidget {
         onPressed: () {
           // Handle button press
           print('Button $number pressed');
+          if (ButtonSegment.A.select())
+            Wurf1 = number;
+            Wurf2 = number;
+            Wurf3 = number;
+
         },
         child: Text(
           text ?? '$number',

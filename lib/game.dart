@@ -1,4 +1,5 @@
 import 'package:dartpilot/game_active_stats.dart';
+import 'package:dartpilot/main.dart';
 import 'package:flutter/material.dart';
 
 import 'game_point_selector.dart';
@@ -32,9 +33,13 @@ Widget generateNavigationRow() {
             borderRadius: BorderRadius.circular(8.0),
             color: Colors.green.shade500,
           ),
-          child: TextButton(
+          child: ElevatedButton(
             onPressed: () {
-              // Add your functionality here for the right button
+              /*Navigator.
+              push(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              )*/
             },
             child: Text(
               "Next",
