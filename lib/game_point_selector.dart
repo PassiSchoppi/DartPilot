@@ -1,12 +1,12 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 enum DartThrow { A, B, C }
+
 int Wurf1 = 0;
 int Wurf2 = 0;
 int Wurf3 = 0;
+DartThrow sel = DartThrow.A;
 
 class SingleChoice extends StatefulWidget {
   const SingleChoice({super.key});
@@ -16,11 +16,7 @@ class SingleChoice extends StatefulWidget {
 }
 
 class _SingleChoiceState extends State<SingleChoice> {
-  DartThrow calendarView = DartThrow.A;
-
-
-
-
+  DartThrow selectedDart = DartThrow.A;
   @override
   Widget build(BuildContext context) {
     return SegmentedButton<DartThrow>(
@@ -35,14 +31,18 @@ class _SingleChoiceState extends State<SingleChoice> {
             fontSize: 23,
           )),
       segments: <ButtonSegment<DartThrow>>[
-        ButtonSegment<DartThrow>(value: DartThrow.A, label: Text(Wurf1.toString())),
-        ButtonSegment<DartThrow>(value: DartThrow.B, label: Text(Wurf2.toString())),
-        ButtonSegment<DartThrow>(value: DartThrow.C, label: Text(Wurf3.toString())),
+        ButtonSegment<DartThrow>(
+            value: DartThrow.A, label: Text(Wurf1.toString())),
+        ButtonSegment<DartThrow>(
+            value: DartThrow.B, label: Text(Wurf2.toString())),
+        ButtonSegment<DartThrow>(
+            value: DartThrow.C, label: Text(Wurf3.toString())),
       ],
-      selected: <DartThrow>{calendarView},
+      selected: <DartThrow>{selectedDart},
       onSelectionChanged: (Set<DartThrow> newSelection) {
         setState(() {
-          calendarView = newSelection.first;
+          selectedDart = newSelection.first;
+          sel = selectedDart;
         });
       },
       showSelectedIcon: false,
@@ -50,18 +50,21 @@ class _SingleChoiceState extends State<SingleChoice> {
   }
 }
 
-class NumberButton extends StatelessWidget {
+class NumberButton extends StatefulWidget {
   final int number;
   final Color? backgrounC;
   final String? text;
 
-  static const Color defaultBackgroundColor = Colors.transparent;
-
-  NumberButton(this.number, {this.backgrounC, this.text});
+  const NumberButton(this.number, {this.backgrounC, this.text});
 
   @override
+  _NumberButtonState createState() => _NumberButtonState();
+}
+
+class _NumberButtonState extends State<NumberButton> {
+  @override
   Widget build(BuildContext context) {
-    final Color finalBackgroundColor = backgrounC ?? defaultBackgroundColor;
+    final Color finalBackgroundColor = widget.backgrounC ?? Colors.transparent;
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: OutlinedButton(
@@ -79,15 +82,27 @@ class NumberButton extends StatelessWidget {
         ),
         onPressed: () {
           // Handle button press
-          print('Button $number pressed');
-          if (ButtonSegment.A.select())
-            Wurf1 = number;
-            Wurf2 = number;
-            Wurf3 = number;
-
+          print('Button ${widget.number} pressed');
+          switch (sel) {
+            case DartThrow.A:
+              setState(() {
+                Wurf1 = widget.number;
+              });
+              break;
+            case DartThrow.B:
+              setState(() {
+                Wurf2 = widget.number;
+              });
+              break;
+            case DartThrow.C:
+              setState(() {
+                Wurf3 = widget.number;
+              });
+              break;
+          }
         },
         child: Text(
-          text ?? '$number',
+          widget.text ?? '${widget.number}',
           style: TextStyle(fontSize: 20.0), // Reduce font size
         ),
       ),
