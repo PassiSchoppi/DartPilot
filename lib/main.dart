@@ -33,6 +33,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GameData gameData = GameData();
+  static const MAX_PLAYER_COUNT = 4;
+  late List<TextEditingController> controllers = List.generate(MAX_PLAYER_COUNT, (index) => TextEditingController(text: gameData.playerNames[index]));
 
   void _incrementCounter() {
     setState(() {
@@ -61,16 +63,14 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 20.0),
               Wrap(
                 alignment: WrapAlignment.center,
-                children: List.generate(4, (index) {
+                children: List.generate(MAX_PLAYER_COUNT, (index) {
                   int playerCount = index + 1;
                   return Padding(
                     padding: EdgeInsets.all(5.0),
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          gameData.numberOfPlayers = playerCount;
-                          gameData.playerNames = List.generate(gameData.numberOfPlayers,
-                              (index) => 'Spieler ${index + 1}');
+                          gameData.generatePlayerList(playerCount);
                           print("$gameData.selectedPlayers");
                         });
                       },
@@ -107,17 +107,30 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(height: 10),
               Column(
-                children: gameData.playerNames.map((name) {
+                children: List.generate(gameData.numberOfPlayers, (index) {
                   return TextFormField(
-                    initialValue: name,
-                    onChanged: (value) {
-                      gameData.playerNames[gameData.playerNames.indexOf(name)] = value;
+                    controller: controllers[index],
+                    onChanged: (newValue) {
+                      setState(() {
+                        // Update the value in the playerNames list when text changes
+                        gameData.playerNames[index] = newValue;
+                      });
                     },
                     decoration: InputDecoration(
-                      labelText: 'Spieler ${gameData.playerNames.indexOf(name) + 1}',
+                      labelText: 'Player ${index + 1}',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            // Clear the text and update the playerNames list
+                            controllers[index].clear();
+                            gameData.playerNames[index] = '';
+                          });
+                        },
+                      ),
                     ),
                   );
-                }).toList(),
+                }),
               ),
               Text(
                 'Spielmodus:',

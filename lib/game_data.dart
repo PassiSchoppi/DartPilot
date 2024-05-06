@@ -39,16 +39,23 @@ class GameData {
             growable: true));
   }
 
+  void generatePlayerList(int length) {
+    numberOfPlayers = length;
+    List<String> playerNames =
+      List.generate(length, (index) => 'Spieler ${index + 1}');
+  }
+
   GameData._internal();
 
   // Spielmodus
   bool isSingle = true;
   bool is301 = true;
+  static const MAX_PLAYER_COUNT = 4;
 
   // Anzahl der Spieler
   int numberOfPlayers = 1;
   List<String> playerNames =
-      List.generate(1, (index) => 'Spieler ${index + 1}');
+      List.generate(MAX_PLAYER_COUNT, (index) => 'Spieler ${index + 1}');
 
   // Aktiver Spieler
   int activePlayer = 0;
