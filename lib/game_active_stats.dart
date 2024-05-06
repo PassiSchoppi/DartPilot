@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'game_data.dart';
+import 'package:provider/provider.dart';
 
 class ActiveStats extends StatelessWidget {
   GameData gameData = GameData();
@@ -8,15 +9,16 @@ class ActiveStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Padding(
-        padding: EdgeInsets.only(top: 45, bottom: 15),
-        child: Text(
-          gameData.playerNames[gameData.activePlayer],
-          style: TextStyle(
-            fontSize: 48,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+          padding: EdgeInsets.only(top: 45, bottom: 15),
+          child: Consumer<GameData>(builder: (context, gameData, child) {
+            return Text(
+              gameData.playerNames[gameData.activePlayer],
+              style: TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          })),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
