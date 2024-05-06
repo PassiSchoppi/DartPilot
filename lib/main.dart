@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'game.dart';
 import 'game_data.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => GameData(),
+        child: MyApp(),
+      ),
+  );
 }
 
 class MyApp extends StatelessWidget {

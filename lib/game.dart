@@ -1,9 +1,12 @@
 import 'package:dartpilot/game_active_stats.dart';
 import 'package:flutter/material.dart';
 
+import 'game_data.dart';
 import 'game_point_selector.dart';
 
 Widget generateNavigationRow() {
+  GameData gameData = GameData();
+
   return Row(
     children: [
       Expanded(
@@ -17,9 +20,7 @@ Widget generateNavigationRow() {
           ),
           child: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              // Add your functionality here for the left button
-            },
+            onPressed: gameData.previousPlayer,
           ),
         ),
       ),
@@ -33,9 +34,7 @@ Widget generateNavigationRow() {
             color: Colors.green.shade500,
           ),
           child: TextButton(
-            onPressed: () {
-              // Add your functionality here for the right button
-            },
+            onPressed: gameData.nextPlayer,
             child: Text(
               "Next",
               style: TextStyle(
