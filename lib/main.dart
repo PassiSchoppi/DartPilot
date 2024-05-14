@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'game.dart';
+import 'end.dart';
+import 'zwischenBild.dart';
 import 'game_data.dart';
 import 'package:provider/provider.dart';
 
@@ -262,6 +264,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   },
                   child: Text('Start'),
+                ),
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EndScreen()),
+                    );
+                  },
+                  child: Text('End'),
                 ),
               ),
             ],
