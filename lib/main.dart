@@ -65,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 'Anzahl von Spieler:',
                 style: TextStyle(fontSize: 20.0),
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 20.0),
               Wrap(
@@ -109,38 +110,51 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 20),
               Text(
                 'Spielernamen:',
-                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20.0),
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 10),
-              Column(
-                children: List.generate(gameData.numberOfPlayers, (index) {
-                  return TextFormField(
-                    controller: controllers[index],
-                    onChanged: (newValue) {
-                      setState(() {
-                        // Update the value in the playerNames list when text changes
-                        gameData.playerNames[index] = newValue;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Player ${index + 1}',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: () {
+              Center(
+                child: Container(
+                  width: 300, // Festlegen einer festen Breite für die Spalte
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch, // Spaltenbreite begrenzen
+                    children: List.generate(gameData.numberOfPlayers, (index) {
+                      return TextFormField(
+                        controller: controllers[index],
+                        onChanged: (newValue) {
                           setState(() {
-                            // Clear the text and update the playerNames list
-                            controllers[index].clear();
-                            gameData.playerNames[index] = '';
+                            // Update the value in the playerNames list when text changes
+                            gameData.playerNames[index] = newValue;
                           });
                         },
-                      ),
-                    ),
-                  );
-                }),
+                        decoration: InputDecoration(
+                          labelText: 'Player ${index + 1}',
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              setState(() {
+                                // Clear the text and update the playerNames list
+                                controllers[index].clear();
+                                gameData.playerNames[index] = '';
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
               ),
+
+
+              SizedBox(height: 20),
               Text(
                 'Spielmodus:',
-                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20.0),
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
               Row(
@@ -188,9 +202,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
+              SizedBox(height: 20),
               Text(
                 'Out:',
-                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 20.0),
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
               Row(
