@@ -1,12 +1,11 @@
+import 'package:dartpilot/game_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 enum DartThrow { A, B, C }
 
-int Wurf1 = 0;
-int Wurf2 = 0;
-int Wurf3 = 0;
-DartThrow sel = DartThrow.A;
+var sel = 0;
 
 class SingleChoice extends StatefulWidget {
   const SingleChoice({Key? key});
@@ -17,6 +16,7 @@ class SingleChoice extends StatefulWidget {
 
 class _SingleChoiceState extends State<SingleChoice> {
   DartThrow selectedDart = DartThrow.A;
+  GameData gameData = GameData();
   @override
   Widget build(BuildContext context) {
     return SegmentedButton<DartThrow>(
@@ -32,17 +32,46 @@ class _SingleChoiceState extends State<SingleChoice> {
           )),
       segments: <ButtonSegment<DartThrow>>[
         ButtonSegment<DartThrow>(
-            value: DartThrow.A, label: Text(Wurf1.toString())),
+            value: DartThrow.A,
+            label: Consumer<GameData>(builder: (context, gameData, child) {
+              return Text((gameData.playerScoresByRound[gameData.activePlayer]
+                          [gameData.activeSet][gameData.activeLeg][0][0] *
+                      gameData.playerScoresByRound[gameData.activePlayer]
+                          [gameData.activeSet][gameData.activeLeg][0][1])
+                  .toString());
+            })),
         ButtonSegment<DartThrow>(
-            value: DartThrow.B, label: Text(Wurf2.toString())),
+            value: DartThrow.B, label: Consumer<GameData>(builder: (context, gameData, child) {
+          return Text((gameData.playerScoresByRound[gameData.activePlayer]
+          [gameData.activeSet][gameData.activeLeg][1][0] *
+              gameData.playerScoresByRound[gameData.activePlayer]
+              [gameData.activeSet][gameData.activeLeg][1][1])
+              .toString());
+        })),
         ButtonSegment<DartThrow>(
-            value: DartThrow.C, label: Text(Wurf3.toString())),
+            value: DartThrow.C, label: Consumer<GameData>(builder: (context, gameData, child) {
+          return Text((gameData.playerScoresByRound[gameData.activePlayer]
+          [gameData.activeSet][gameData.activeLeg][2][0] *
+              gameData.playerScoresByRound[gameData.activePlayer]
+              [gameData.activeSet][gameData.activeLeg][2][1])
+              .toString());
+        })),
       ],
       selected: <DartThrow>{selectedDart},
       onSelectionChanged: (Set<DartThrow> newSelection) {
         setState(() {
           selectedDart = newSelection.first;
-          sel = selectedDart;
+          switch (selectedDart) {
+            case DartThrow.A:
+              sel = 0;
+              break;
+            case DartThrow.B:
+              sel = 1;
+              break;
+            case DartThrow.C:
+              sel = 2;
+              break;
+          }
         });
       },
       showSelectedIcon: false,
@@ -52,6 +81,7 @@ class _SingleChoiceState extends State<SingleChoice> {
 
 class _NumberButtonState extends State<NumberButton> {
   bool multiplied = false;
+  GameData gameData = GameData();
 
   @override
   Widget build(BuildContext context) {
@@ -72,51 +102,19 @@ class _NumberButtonState extends State<NumberButton> {
         onPressed: () {
           // Handle button press
           print('Button ${widget.number} pressed');
-          switch (sel) {
-            case DartThrow.A:
-              multiplied = false;
-              setState(() {
-                if (widget.number == -2 && !multiplied) {
-                  Wurf1 *= 2;
-                  multiplied = true;
-                
-                } else if (widget.number == -3 && !multiplied) {
-                  Wurf1 *= 3;
-                  multiplied= true;
-                } else {
-                  Wurf1 = widget.number;
-                }
-              });
-              break;
-            case DartThrow.B:
-              multiplied = false;
-              setState(() {
-                if (widget.number == -2 && !multiplied) {
-                  Wurf2 *= 2;
-                  multiplied = true;
-                } else if (widget.number == -3 && !multiplied) {
-                  Wurf2 *= 3;
-                  multiplied = true;
-                } else {
-                  Wurf2 = widget.number;
-                }
-              });
-              break;
-            case DartThrow.C:
-              multiplied = false;
-              setState(() {
-                if (widget.number == -2 && !multiplied) {
-                  Wurf3 *= 2;
-                  multiplied = true;
-                } else if (widget.number == -3 && !multiplied) {
-                  Wurf3 *= 3;
-                  multiplied = true;
-                } else {
-                  Wurf3 = widget.number;
-                }
-              });
-              break;
-          }
+          setState(() {
+            if (widget.number < 0) {
+              gameData.playerScoresByRound[gameData.activePlayer]
+                      [gameData.activeSet][gameData.activeLeg][sel][1] =
+                  -widget.number;
+            } else {
+              gameData.playerScoresByRound[gameData.activePlayer]
+                      [gameData.activeSet][gameData.activeLeg][sel][0] =
+                  widget.number;
+            }
+            gameData.calculateScores();
+            gameData.notifyListeners();
+          });
         },
         child: Text(
           widget.text ?? '${widget.number}',

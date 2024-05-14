@@ -9,9 +9,9 @@ class GameData with ChangeNotifier {
   }
 
   void nextPlayer() {
-    if( activePlayer < numberOfPlayers-1){
+    if (activePlayer < numberOfPlayers - 1) {
       activePlayer += 1;
-    }else{
+    } else {
       activePlayer = 0;
     }
     calculateScores();
@@ -19,11 +19,11 @@ class GameData with ChangeNotifier {
   }
 
   void previousPlayer() {
-    if( activePlayer > 0){
+    if (activePlayer > 0) {
       activePlayer -= 1;
-    }else if(activePlayer == 0){
-      activePlayer = numberOfPlayers-1;
-    }else{
+    } else if (activePlayer == 0) {
+      activePlayer = numberOfPlayers - 1;
+    } else {
       activePlayer = 0;
     }
     calculateScores();
@@ -34,24 +34,25 @@ class GameData with ChangeNotifier {
     // Clear existing playerScores
     for (int i = 0; i < playerScores.length; i++) {
       print("calculating scores:");
-      print(is301? "301" : "501");
-      playerScores[i] = is301? 301 : 501;
+      print(is301 ? "301" : "501");
+      playerScores[i] = is301 ? 301 : 501;
     }
 
     // Iterate over playerScoresByRound and sum up points for each player
     for (int player = 0; player < playerScoresByRound.length; player++) {
       for (int leg = 0; leg < playerScoresByRound[player].length; leg++) {
-        for (int set = 0; set <
-            playerScoresByRound[player][leg].length; set++) {
+        for (int set = 0;
+            set < playerScoresByRound[player][leg].length;
+            set++) {
           for (int throwIndex = 0;
-          throwIndex < playerScoresByRound[player][leg][set].length;
-          throwIndex++) {
+              throwIndex < playerScoresByRound[player][leg][set].length;
+              throwIndex++) {
             for (int pointIndex = 0;
-            pointIndex <
-                playerScoresByRound[player][leg][set][throwIndex].length;
-            pointIndex++) {
+                pointIndex <
+                    playerScoresByRound[player][leg][set][throwIndex].length;
+                pointIndex++) {
               playerScores[player] -=
-              playerScoresByRound[player][leg][set][throwIndex][pointIndex];
+                  playerScoresByRound[player][leg][set][throwIndex][pointIndex];
             }
           }
         }
@@ -64,22 +65,25 @@ class GameData with ChangeNotifier {
     playerScoresByRound = List.generate(
         MAX_PLAYER_COUNT,
         (index) => List.generate(
+            // Sets
             1,
-            (indexA) =>
-                List.generate(
+            (indexA) => List.generate(
+                // Legs
+                1,
+                (indexSet) => List.generate(
+                    // Würfe
                     3,
-                    (indexB) => List.generate(1, (indexB) => List.generate(1, (indexC) => 0),
-                )
-              ),
-          growable: true // Anzahl der Runden kann wachsen
-        )
-    );
+                    (indexB) => List.from([0, 1])),
+                growable: true // Sets
+                ),
+            growable: true // Legs
+            ));
   }
 
   void generatePlayerList(int length) {
     numberOfPlayers = length;
     List<String> playerNames =
-      List.generate(length, (index) => 'Spieler ${index + 1}');
+        List.generate(length, (index) => 'Spieler ${index + 1}');
     calculateScores();
   }
 
@@ -89,6 +93,7 @@ class GameData with ChangeNotifier {
   bool isSingle = true;
   bool is301 = true;
   static const MAX_PLAYER_COUNT = 4;
+  static const NUMBER_OF_SETS = 3;
 
   // Anzahl der Spieler
   int numberOfPlayers = 1;
@@ -101,21 +106,24 @@ class GameData with ChangeNotifier {
   int activeSet = 0;
 
   List<int> playerScores = List.generate(MAX_PLAYER_COUNT, (index) => 0);
-  // Spieler Sets Legs Wurf Punkte
-  List<List<List<List<List<int>>>>> playerScoresByRound =
-  List.generate(
-      1,
+  // Spieler Sets Legs Wurf [Punkte Multiplikator]
+  // MAX     grow grow  3   1x
+  List<List<List<List<List<int>>>>> playerScoresByRound = List.generate(
+      MAX_PLAYER_COUNT,
       (index) => List.generate(
+          // Sets
           1,
           (indexA) => List.generate(
+              // Legs
               1,
-              (indexSet) => List.generate(3, (indexB) => List.generate(1, (indexB) => 0)
-              ),
+              (indexSet) => List.generate(
+                  // Würfe
+                  3,
+                  (indexB) => List.from([0, 1])),
               growable: true // Sets
-          ),
+              ),
           growable: true // Legs
-      )
-  );
+          ));
   // Gewinner pro Runde
   List<int> winnerPerRound = List.generate(0, (index) => 0, growable: true);
 }
