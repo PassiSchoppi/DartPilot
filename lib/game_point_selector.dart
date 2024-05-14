@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 enum DartThrow { A, B, C }
 
@@ -25,8 +24,6 @@ class _SingleChoiceState extends State<SingleChoice> {
           foregroundColor: Colors.black,
           selectedForegroundColor: Colors.white,
           selectedBackgroundColor: Colors.black,
-
-          // visualDensity: VisualDensity(horizontal: 3, vertical: 1),
           textStyle: TextStyle(
             fontSize: 23,
           )),
@@ -79,7 +76,7 @@ class _NumberButtonState extends State<NumberButton> {
                 if (widget.number == -2 && !multiplied) {
                   Wurf1 *= 2;
                   multiplied = true;
-                
+
                 } else if (widget.number == -3 && !multiplied) {
                   Wurf1 *= 3;
                   multiplied= true;
@@ -143,37 +140,39 @@ class PointSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          child: const SingleChoice(),
-        ),
-        SingleChildScrollView(
-          child: GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 4,
-            childAspectRatio: 2,
-            children: List.generate(numbers.length, (index) {
-              return NumberButton(numbers[index]);
-            }),
+    return SingleChildScrollView( // Wrap the entire content in SingleChildScrollView
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: const SingleChoice(),
           ),
-        ),
-        SingleChildScrollView(
-          child: GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 4,
-            childAspectRatio: 2,
-            children: [
-              NumberButton(-2,
-                  text: 'x2', backgrounC: Colors.amberAccent.shade100),
-              NumberButton(-3, text: 'x3', backgrounC: Colors.orange.shade200),
-              NumberButton(25, backgrounC: Colors.lightGreen.shade200),
-              NumberButton(50, backgrounC: Colors.redAccent.shade100),
-            ],
+          SingleChildScrollView(
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              childAspectRatio: 2,
+              children: List.generate(numbers.length, (index) {
+                return NumberButton(numbers[index]);
+              }),
+            ),
           ),
-        )
-      ],
+          SingleChildScrollView(
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              childAspectRatio: 2,
+              children: [
+                NumberButton(-2,
+                    text: 'x2', backgrounC: Colors.amberAccent.shade100),
+                NumberButton(-3, text: 'x3', backgrounC: Colors.orange.shade200),
+                NumberButton(25, backgrounC: Colors.lightGreen.shade200),
+                NumberButton(50, backgrounC: Colors.redAccent.shade100),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -53,18 +53,23 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-            child: Column(
-              children: [
-                ActiveStats(),
-                const SizedBox(height: 40),
-                PointSelector(),
-                Spacer(),
-                generateNavigationRow(),
-                const SizedBox(height: 20),
-              ],
-            )
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 20),
+              ActiveStats(),
+              SizedBox(height: 40),
+              PointSelector(),
+              SizedBox(height: 40),
+              generateNavigationRow(),
+              SizedBox(height: 20),
+            ],
           ),
-        );
+        ),
+      ),
+    );
   }
 }
+
