@@ -9,7 +9,7 @@ int Wurf3 = 0;
 DartThrow sel = DartThrow.A;
 
 class SingleChoice extends StatefulWidget {
-  const SingleChoice({super.key});
+  const SingleChoice({Key? key});
 
   @override
   State<SingleChoice> createState() => _SingleChoiceState();
@@ -50,6 +50,83 @@ class _SingleChoiceState extends State<SingleChoice> {
   }
 }
 
+class _NumberButtonState extends State<NumberButton> {
+  bool multiplied = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color finalBackgroundColor = widget.backgrounC ?? Colors.transparent;
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          backgroundColor: finalBackgroundColor,
+          shadowColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          side: BorderSide(color: Colors.black),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        onPressed: () {
+          // Handle button press
+          print('Button ${widget.number} pressed');
+          switch (sel) {
+            case DartThrow.A:
+              multiplied = false;
+              setState(() {
+                if (widget.number == -2 && !multiplied) {
+                  Wurf1 *= 2;
+                  multiplied = true;
+                
+                } else if (widget.number == -3 && !multiplied) {
+                  Wurf1 *= 3;
+                  multiplied= true;
+                } else {
+                  Wurf1 = widget.number;
+                }
+              });
+              break;
+            case DartThrow.B:
+              multiplied = false;
+              setState(() {
+                if (widget.number == -2 && !multiplied) {
+                  Wurf2 *= 2;
+                  multiplied = true;
+                } else if (widget.number == -3 && !multiplied) {
+                  Wurf2 *= 3;
+                  multiplied = true;
+                } else {
+                  Wurf2 = widget.number;
+                }
+              });
+              break;
+            case DartThrow.C:
+              multiplied = false;
+              setState(() {
+                if (widget.number == -2 && !multiplied) {
+                  Wurf3 *= 2;
+                  multiplied = true;
+                } else if (widget.number == -3 && !multiplied) {
+                  Wurf3 *= 3;
+                  multiplied = true;
+                } else {
+                  Wurf3 = widget.number;
+                }
+              });
+              break;
+          }
+        },
+        child: Text(
+          widget.text ?? '${widget.number}',
+          style: TextStyle(fontSize: 20.0),
+        ),
+      ),
+    );
+  }
+}
+
 class NumberButton extends StatefulWidget {
   final int number;
   final Color? backgrounC;
@@ -59,55 +136,6 @@ class NumberButton extends StatefulWidget {
 
   @override
   _NumberButtonState createState() => _NumberButtonState();
-}
-
-class _NumberButtonState extends State<NumberButton> {
-  @override
-  Widget build(BuildContext context) {
-    final Color finalBackgroundColor = widget.backgrounC ?? Colors.transparent;
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 20), // Set button padding
-          backgroundColor: finalBackgroundColor, // Set white background
-          shadowColor: Colors.transparent,
-          foregroundColor: Colors.black, // Set black foreground color
-          side: BorderSide(color: Colors.black), // Set black border color
-          shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(8.0), // Set corner radius to 8px
-          ),
-        ),
-        onPressed: () {
-          // Handle button press
-          print('Button ${widget.number} pressed');
-          switch (sel) {
-            case DartThrow.A:
-              setState(() {
-                Wurf1 = widget.number;
-              });
-              break;
-            case DartThrow.B:
-              setState(() {
-                Wurf2 = widget.number;
-              });
-              break;
-            case DartThrow.C:
-              setState(() {
-                Wurf3 = widget.number;
-              });
-              break;
-          }
-        },
-        child: Text(
-          widget.text ?? '${widget.number}',
-          style: TextStyle(fontSize: 20.0), // Reduce font size
-        ),
-      ),
-    );
-  }
 }
 
 class PointSelector extends StatelessWidget {
@@ -124,7 +152,7 @@ class PointSelector extends StatelessWidget {
         SingleChildScrollView(
           child: GridView.count(
             shrinkWrap: true,
-            crossAxisCount: 4, // Adjust the number of columns as needed
+            crossAxisCount: 4,
             childAspectRatio: 2,
             children: List.generate(numbers.length, (index) {
               return NumberButton(numbers[index]);
@@ -134,7 +162,7 @@ class PointSelector extends StatelessWidget {
         SingleChildScrollView(
           child: GridView.count(
             shrinkWrap: true,
-            crossAxisCount: 4, // Adjust the number of columns as needed
+            crossAxisCount: 4,
             childAspectRatio: 2,
             children: [
               NumberButton(-2,
