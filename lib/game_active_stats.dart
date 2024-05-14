@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'game_data.dart';
 import 'package:provider/provider.dart';
@@ -22,24 +24,36 @@ class ActiveStats extends StatelessWidget {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('187',
-              style: TextStyle(fontSize: 96, fontStyle: FontStyle.italic)),
+          Consumer<GameData>(builder: (context, gameData, child) {
+            return Text(
+              gameData.playerScores[gameData.activePlayer].toString(),
+              style: TextStyle(
+                fontSize: 96,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic
+              ),
+            );
+          }),
           Text('/501',
               style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
-          Padding(
-            padding: EdgeInsets.only(left: 55),
-            child: Column(children: [
-              Text('⌀ im Set:',
-                  style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
-              Text(
-                '161', // Replace with the name of the user
-                style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic),
-              ),
-            ]),
-          ),
+          Flexible(
+              child: Padding(
+              padding: EdgeInsets.only(left: 55),
+              child: Column(children: [
+                Text('⌀ im Set:',
+                    style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
+                Consumer<GameData>(builder: (context, gameData, child) {
+                  return Text(
+                    gameData.playerScores[gameData.activePlayer].toString(),
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                }),
+              ]),
+            )
+          )
         ],
       )
     ]);

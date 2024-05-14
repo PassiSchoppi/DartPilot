@@ -14,22 +14,28 @@ class GameData with ChangeNotifier {
     }else{
       activePlayer = 0;
     }
+    calculateScores();
     notifyListeners();
   }
 
   void previousPlayer() {
     if( activePlayer > 0){
       activePlayer -= 1;
+    }else if(activePlayer == 0){
+      activePlayer = numberOfPlayers-1;
     }else{
       activePlayer = 0;
     }
+    calculateScores();
     notifyListeners();
   }
 
   void calculateScores() {
     // Clear existing playerScores
     for (int i = 0; i < playerScores.length; i++) {
-      playerScores[i] = 0;
+      print("calculating scores:");
+      print(is301? "301" : "501");
+      playerScores[i] = is301? 301 : 501;
     }
 
     // Iterate over playerScoresByRound and sum up points for each player
@@ -44,13 +50,14 @@ class GameData with ChangeNotifier {
             pointIndex <
                 playerScoresByRound[player][leg][set][throwIndex].length;
             pointIndex++) {
-              playerScores[player] +=
+              playerScores[player] -=
               playerScoresByRound[player][leg][set][throwIndex][pointIndex];
             }
           }
         }
       }
     }
+    notifyListeners();
   }
 
   void generateScoreByRound() {
@@ -73,6 +80,7 @@ class GameData with ChangeNotifier {
     numberOfPlayers = length;
     List<String> playerNames =
       List.generate(length, (index) => 'Spieler ${index + 1}');
+    calculateScores();
   }
 
   GameData._internal();
@@ -92,7 +100,7 @@ class GameData with ChangeNotifier {
   int activeLeg = 0;
   int activeSet = 0;
 
-  List<int> playerScores = List.generate(1, (index) => 0);
+  List<int> playerScores = List.generate(MAX_PLAYER_COUNT, (index) => 0);
   // Spieler Sets Legs Wurf Punkte
   List<List<List<List<List<int>>>>> playerScoresByRound =
   List.generate(

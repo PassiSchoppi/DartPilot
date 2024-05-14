@@ -152,6 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         gameData.is301 = true;
                       });
+                      gameData.calculateScores();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
@@ -171,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         gameData.is301 = false;
                       });
+                      gameData.calculateScores();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
