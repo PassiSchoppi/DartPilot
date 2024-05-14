@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 
 enum DartThrow { A, B, C }
 
-var sel = 0;
-
 class SingleChoice extends StatefulWidget {
   const SingleChoice({Key? key});
 
@@ -64,15 +62,16 @@ class _SingleChoiceState extends State<SingleChoice> {
           selectedDart = newSelection.first;
           switch (selectedDart) {
             case DartThrow.A:
-              sel = 0;
+              gameData.activeThrow = 0;
               break;
             case DartThrow.B:
-              sel = 1;
+              gameData.activeThrow = 1;
               break;
             case DartThrow.C:
-              sel = 2;
+              gameData.activeThrow = 2;
               break;
           }
+          gameData.notifyListeners();
         });
       },
       showSelectedIcon: false,
@@ -86,7 +85,12 @@ class _NumberButtonState extends State<NumberButton> {
 
   @override
   Widget build(BuildContext context) {
-    final Color finalBackgroundColor = widget.backgrounC ?? Colors.transparent;
+    final Color finalBackgroundColor = ((widget.number == gameData.playerScoresByRound[gameData.activePlayer]
+    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0])||(-widget.number == gameData.playerScoresByRound[gameData.activePlayer]
+    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1]))?Colors.black:(widget.backgrounC ?? Colors.transparent);
+    final Color finalForegroundColor = ((widget.number == gameData.playerScoresByRound[gameData.activePlayer]
+    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0])||(-widget.number == gameData.playerScoresByRound[gameData.activePlayer]
+    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1]))?Colors.white:Colors.black;
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: OutlinedButton(
@@ -94,7 +98,7 @@ class _NumberButtonState extends State<NumberButton> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           backgroundColor: finalBackgroundColor,
           shadowColor: Colors.transparent,
-          foregroundColor: Colors.black,
+          foregroundColor: finalForegroundColor,
           side: BorderSide(color: Colors.black),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -105,12 +109,21 @@ class _NumberButtonState extends State<NumberButton> {
           print('Button ${widget.number} pressed');
           setState(() {
             if (widget.number < 0) {
+              if (gameData.playerScoresByRound[gameData.activePlayer]
+              [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0] <= 20) {
+                gameData.playerScoresByRound[gameData.activePlayer]
+                        [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1] =
+                    -widget.number;
+              }
+            } else if (widget.number > 20) {
               gameData.playerScoresByRound[gameData.activePlayer]
-                      [gameData.activeSet][gameData.activeLeg][sel][1] =
-                  -widget.number;
+                      [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0] =
+                  widget.number;
+              gameData.playerScoresByRound[gameData.activePlayer]
+                  [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1] = 1;
             } else {
               gameData.playerScoresByRound[gameData.activePlayer]
-                      [gameData.activeSet][gameData.activeLeg][sel][0] =
+                      [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0] =
                   widget.number;
             }
             gameData.calculateScores();

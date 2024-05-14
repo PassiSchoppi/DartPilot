@@ -1,5 +1,6 @@
 import 'package:dartpilot/game_active_stats.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'game_data.dart';
 import 'game_point_selector.dart';
@@ -59,9 +60,9 @@ class GameScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 20),
-              ActiveStats(),
+              Consumer<GameData>(builder: (context, gameData, child) {return ActiveStats();}),
               SizedBox(height: 40),
-              PointSelector(),
+              Consumer<GameData>(builder: (context, gameData, child) {return PointSelector();}),
               SizedBox(height: 40),
               generateNavigationRow(),
               SizedBox(height: 20),
