@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
+import 'game_point_selector.dart';
 
 class GameData with ChangeNotifier {
   static final GameData _instance = GameData._internal();
@@ -14,6 +14,7 @@ class GameData with ChangeNotifier {
     } else {
       activePlayer = 0;
     }
+    activeThrow = 0;
     calculateScores();
     notifyListeners();
   }
@@ -26,6 +27,7 @@ class GameData with ChangeNotifier {
     } else {
       activePlayer = 0;
     }
+    activeThrow = 2;
     calculateScores();
     notifyListeners();
   }
@@ -47,12 +49,14 @@ class GameData with ChangeNotifier {
           for (int throwIndex = 0;
               throwIndex < playerScoresByRound[player][leg][set].length;
               throwIndex++) {
-            for (int pointIndex = 0;
-                pointIndex <
-                    playerScoresByRound[player][leg][set][throwIndex].length;
-                pointIndex++) {
+
+            if(playerScoresByRound[player][leg][set][throwIndex][0] > 20){
               playerScores[player] -=
-                  playerScoresByRound[player][leg][set][throwIndex][pointIndex];
+                  playerScoresByRound[player][leg][set][throwIndex][0] * 1;
+            }else {
+              playerScores[player] -= playerScoresByRound[player][leg][set]
+                      [throwIndex][0] *
+                  playerScoresByRound[player][leg][set][throwIndex][1];
             }
           }
         }
@@ -102,8 +106,10 @@ class GameData with ChangeNotifier {
 
   // Aktiver Spieler
   int activePlayer = 0;
-  int activeLeg = 0;
-  int activeSet = 0;
+  int activeLeg = 0;   // 0-... infinit
+  int activeSet = 0;   // 0-... bis Sore auf 0
+  int activeThrow = 0; // 0-2
+  DartThrow selectedDart = DartThrow.A;
 
   List<int> playerScores = List.generate(MAX_PLAYER_COUNT, (index) => 0);
   // Spieler Sets Legs Wurf [Punkte Multiplikator]
