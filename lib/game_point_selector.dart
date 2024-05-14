@@ -1,5 +1,6 @@
 import 'package:dartpilot/game_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -39,21 +40,23 @@ class _SingleChoiceState extends State<SingleChoice> {
                   .toString());
             })),
         ButtonSegment<DartThrow>(
-            value: DartThrow.B, label: Consumer<GameData>(builder: (context, gameData, child) {
-          return Text((gameData.playerScoresByRound[gameData.activePlayer]
-          [gameData.activeSet][gameData.activeLeg][1][0] *
-              gameData.playerScoresByRound[gameData.activePlayer]
-              [gameData.activeSet][gameData.activeLeg][1][1])
-              .toString());
-        })),
+            value: DartThrow.B,
+            label: Consumer<GameData>(builder: (context, gameData, child) {
+              return Text((gameData.playerScoresByRound[gameData.activePlayer]
+                          [gameData.activeSet][gameData.activeLeg][1][0] *
+                      gameData.playerScoresByRound[gameData.activePlayer]
+                          [gameData.activeSet][gameData.activeLeg][1][1])
+                  .toString());
+            })),
         ButtonSegment<DartThrow>(
-            value: DartThrow.C, label: Consumer<GameData>(builder: (context, gameData, child) {
-          return Text((gameData.playerScoresByRound[gameData.activePlayer]
-          [gameData.activeSet][gameData.activeLeg][2][0] *
-              gameData.playerScoresByRound[gameData.activePlayer]
-              [gameData.activeSet][gameData.activeLeg][2][1])
-              .toString());
-        })),
+            value: DartThrow.C,
+            label: Consumer<GameData>(builder: (context, gameData, child) {
+              return Text((gameData.playerScoresByRound[gameData.activePlayer]
+                          [gameData.activeSet][gameData.activeLeg][2][0] *
+                      gameData.playerScoresByRound[gameData.activePlayer]
+                          [gameData.activeSet][gameData.activeLeg][2][1])
+                  .toString());
+            })),
       ],
       selected: <DartThrow>{selectedDart},
       onSelectionChanged: (Set<DartThrow> newSelection) {
@@ -139,39 +142,35 @@ class PointSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( // Wrap the entire content in SingleChildScrollView
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: const SingleChoice(),
-          ),
-          SingleChildScrollView(
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 4,
-              childAspectRatio: 2,
-              children: List.generate(numbers.length, (index) {
-                return NumberButton(numbers[index]);
-              }),
-            ),
-          ),
-          SingleChildScrollView(
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 4,
-              childAspectRatio: 2,
-              children: [
-                NumberButton(-2,
-                    text: 'x2', backgrounC: Colors.amberAccent.shade100),
-                NumberButton(-3, text: 'x3', backgrounC: Colors.orange.shade200),
-                NumberButton(25, backgrounC: Colors.lightGreen.shade200),
-                NumberButton(50, backgrounC: Colors.redAccent.shade100),
-              ],
-            ),
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          child: const SingleChoice(),
+        ),
+        GridView.count(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          crossAxisCount: 4,
+          childAspectRatio: 2,
+          children: List.generate(numbers.length, (index) {
+            return NumberButton(numbers[index]);
+          }),
+        ),
+        GridView.count(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          crossAxisCount: 4,
+          childAspectRatio: 2,
+          children: [
+            NumberButton(-2,
+                text: 'x2', backgrounC: Colors.amberAccent.shade100),
+            NumberButton(-3, text: 'x3', backgrounC: Colors.orange.shade200),
+            NumberButton(25, backgrounC: Colors.lightGreen.shade200),
+            NumberButton(50, backgrounC: Colors.redAccent.shade100),
+          ],
+        ),
+      ],
     );
   }
 }
