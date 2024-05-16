@@ -1,3 +1,7 @@
+# Vortrag
+Vorschläge von Kasche:
+- "Tutorial" wie man Singleton Klasse macht
+
 # dartpilot
 ![[StoryBord]]
 

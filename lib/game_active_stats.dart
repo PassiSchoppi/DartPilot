@@ -34,7 +34,7 @@ class ActiveStats extends StatelessWidget {
               ),
             );
           }),
-          Text('/501',
+          Text(gameData.is301 ? '/301' : '/501',
               style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
           Flexible(
               child: Padding(
@@ -55,7 +55,9 @@ class ActiveStats extends StatelessWidget {
             )
           )
         ],
-      )
+      ),
+      Text('Set: '+(gameData.activeSet+1).toString()+'        Leg: '+(gameData.activeLeg+1).toString(),
+          style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
     ]);
   }
 }

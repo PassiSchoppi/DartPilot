@@ -1,3 +1,6 @@
+import 'package:dartpilot/zwischenBild.dart';
+import 'package:flutter/material.dart';
+import 'package:dartpilot/end.dart';
 import 'package:flutter/cupertino.dart';
 import 'game_point_selector.dart';
 
@@ -8,7 +11,7 @@ class GameData with ChangeNotifier {
     return _instance;
   }
 
-  void nextPlayer() {
+  void nextPlayer(BuildContext context) {
     if (activePlayer < numberOfPlayers - 1) {
       activePlayer += 1;
     } else {
@@ -16,6 +19,10 @@ class GameData with ChangeNotifier {
       calculateScores();
       if(playerScores[activePlayer] == 0){
         print("Leg gewonnen!");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ZwischenBild()),
+        );
       }else{
         // Alle Spieler haben jeweils 3 mal gewurfen
         print("Growing Legs");
@@ -63,6 +70,7 @@ class GameData with ChangeNotifier {
         for (int leggy = 0;
             leggy < playerScoresByRound[player][setty].length;
             leggy++) {
+          int befor_this_leg = playerScores[player];
           for (int throwIndex = 0;
               throwIndex < playerScoresByRound[player][setty][leggy].length;
               throwIndex++) {
@@ -74,6 +82,10 @@ class GameData with ChangeNotifier {
                       [throwIndex][0] *
                   playerScoresByRound[player][setty][leggy][throwIndex][1];
             }
+          }
+          // Wenn zu viele Punkte gewurfen wurden zählt das entsprechende Leg nicht
+          if(playerScores[player] < 0){
+            playerScores[player] = befor_this_leg;
           }
         }
       }
@@ -139,12 +151,12 @@ class GameData with ChangeNotifier {
               // Legs
               1,
               (indexSet) => List.generate(
-                  // Würfe
+                  // einer von 3 Würfen
                   3,
                   (indexB) => List.from([0, 1])),
-              growable: true // Sets
+              growable: true // Legs
               ),
-          growable: true // Legs
+          growable: true // Sets
           ));
   // Gewinner pro Runde
   List<int> winnerPerRound = List.generate(0, (index) => 0, growable: true);

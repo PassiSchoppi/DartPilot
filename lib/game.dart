@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'game_data.dart';
 import 'game_point_selector.dart';
 
-Widget generateNavigationRow() {
+Widget generateNavigationRow(BuildContext context) {
   GameData gameData = GameData();
 
   return Row(
@@ -35,7 +35,9 @@ Widget generateNavigationRow() {
             color: Colors.green.shade400,
           ),
           child: TextButton(
-            onPressed: gameData.nextPlayer,
+            onPressed: (){
+              gameData.nextPlayer(context);
+            },
             child: Text(
               "Nächster Spieler",
               style: TextStyle(
@@ -64,7 +66,7 @@ class GameScreen extends StatelessWidget {
               SizedBox(height: 40),
               Consumer<GameData>(builder: (context, gameData, child) {return PointSelector();}),
               SizedBox(height: 40),
-              generateNavigationRow(),
+              generateNavigationRow(context),
               SizedBox(height: 20),
             ],
           ),
