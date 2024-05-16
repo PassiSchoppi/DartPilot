@@ -21,7 +21,13 @@ Widget generateNavigationRow(BuildContext context) {
           ),
           child: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: gameData.previousPlayer,
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GameScreen()),
+              );
+              gameData.previousPlayer();
+            },
           ),
         ),
       ),
@@ -36,6 +42,10 @@ Widget generateNavigationRow(BuildContext context) {
           ),
           child: TextButton(
             onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GameScreen()),
+              );
               gameData.nextPlayer(context);
             },
             child: Text(

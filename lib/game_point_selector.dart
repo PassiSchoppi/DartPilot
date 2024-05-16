@@ -32,27 +32,33 @@ class _SingleChoiceState extends State<SingleChoice> {
             value: DartThrow.A,
             label: Consumer<GameData>(builder: (context, gameData, child) {
               return Text((gameData.playerScoresByRound[gameData.activePlayer]
-                          [gameData.activeSet][gameData.activeLeg][0][0] *
+                              [gameData.activeSet][gameData.activeLeg]
+                          [gameData.activeRound][0][0] *
                       gameData.playerScoresByRound[gameData.activePlayer]
-                          [gameData.activeSet][gameData.activeLeg][0][1])
+                              [gameData.activeSet][gameData.activeLeg]
+                          [gameData.activeRound][0][1])
                   .toString());
             })),
         ButtonSegment<DartThrow>(
             value: DartThrow.B,
             label: Consumer<GameData>(builder: (context, gameData, child) {
               return Text((gameData.playerScoresByRound[gameData.activePlayer]
-                          [gameData.activeSet][gameData.activeLeg][1][0] *
+                              [gameData.activeSet][gameData.activeLeg]
+                          [gameData.activeRound][1][0] *
                       gameData.playerScoresByRound[gameData.activePlayer]
-                          [gameData.activeSet][gameData.activeLeg][1][1])
+                              [gameData.activeSet][gameData.activeLeg]
+                          [gameData.activeRound][1][1])
                   .toString());
             })),
         ButtonSegment<DartThrow>(
             value: DartThrow.C,
             label: Consumer<GameData>(builder: (context, gameData, child) {
               return Text((gameData.playerScoresByRound[gameData.activePlayer]
-                          [gameData.activeSet][gameData.activeLeg][2][0] *
+                              [gameData.activeSet][gameData.activeLeg]
+                          [gameData.activeRound][2][0] *
                       gameData.playerScoresByRound[gameData.activePlayer]
-                          [gameData.activeSet][gameData.activeLeg][2][1])
+                              [gameData.activeSet][gameData.activeLeg]
+                          [gameData.activeRound][2][1])
                   .toString());
             })),
       ],
@@ -88,21 +94,21 @@ class _NumberButtonState extends State<NumberButton> {
     final Color finalBackgroundColor = ((widget.number ==
                 gameData.playerScoresByRound[gameData.activePlayer]
                         [gameData.activeSet][gameData.activeLeg]
-                    [gameData.activeThrow][0]) ||
+                    [gameData.activeRound][gameData.activeThrow][0]) ||
             (-widget.number ==
                 gameData.playerScoresByRound[gameData.activePlayer]
                         [gameData.activeSet][gameData.activeLeg]
-                    [gameData.activeThrow][1]))
+                    [gameData.activeRound][gameData.activeThrow][1]))
         ? Colors.black
         : (widget.backgrounC ?? Colors.transparent);
     final Color finalForegroundColor = ((widget.number ==
                 gameData.playerScoresByRound[gameData.activePlayer]
                         [gameData.activeSet][gameData.activeLeg]
-                    [gameData.activeThrow][0]) ||
+                    [gameData.activeRound][gameData.activeThrow][0]) ||
             (-widget.number ==
                 gameData.playerScoresByRound[gameData.activePlayer]
                         [gameData.activeSet][gameData.activeLeg]
-                    [gameData.activeThrow][1]))
+                    [gameData.activeRound][gameData.activeThrow][1]))
         ? Colors.white
         : Colors.black;
     return Padding(
@@ -125,23 +131,26 @@ class _NumberButtonState extends State<NumberButton> {
             if (widget.number < 0) {
               if (gameData.playerScoresByRound[gameData.activePlayer]
                           [gameData.activeSet][gameData.activeLeg]
-                      [gameData.activeThrow][0] <=
+                      [gameData.activeRound][gameData.activeThrow][0] <=
                   20) {
                 gameData.playerScoresByRound[gameData.activePlayer]
-                        [gameData.activeSet][gameData.activeLeg]
-                    [gameData.activeThrow][1] = -widget.number;
+                            [gameData.activeSet][gameData.activeLeg]
+                        [gameData.activeRound][gameData.activeThrow][1] =
+                    -widget.number;
               }
             } else if (widget.number > 20) {
               gameData.playerScoresByRound[gameData.activePlayer]
-                      [gameData.activeSet][gameData.activeLeg]
-                  [gameData.activeThrow][0] = widget.number;
+                          [gameData.activeSet][gameData.activeLeg]
+                      [gameData.activeRound][gameData.activeThrow][0] =
+                  widget.number;
               gameData.playerScoresByRound[gameData.activePlayer]
                       [gameData.activeSet][gameData.activeLeg]
-                  [gameData.activeThrow][1] = 1;
+                  [gameData.activeRound][gameData.activeThrow][1] = 1;
             } else {
               gameData.playerScoresByRound[gameData.activePlayer]
-                      [gameData.activeSet][gameData.activeLeg]
-                  [gameData.activeThrow][0] = widget.number;
+                          [gameData.activeSet][gameData.activeLeg]
+                      [gameData.activeRound][gameData.activeThrow][0] =
+                  widget.number;
             }
             gameData.calculateScores();
             gameData.notifyListeners();
