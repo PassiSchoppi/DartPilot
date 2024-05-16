@@ -42,15 +42,35 @@ class GameData with ChangeNotifier {
           );
         }
       }else{
-        // Alle Spieler haben jeweils 3 mal gewurfen
-        print("Growing Legs");
-        for (int player = 0; player < playerScoresByRound.length; player++) {
-          playerScoresByRound[player][activeSet].add(List.generate(
-            // Würfe
-              3,
-                  (indexB) => List.from([0, 1])));
-        }
+        // Das war nicht das letzte Leg im Set, also wird das nächste Leg begonnen und erste Runde gesetzt
         activeLeg += 1;
+        activeRound = 0;
+        activePlayer = 0;
+        // Der Zwischen Bildschirm wird angezeigt
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ZwischenBild()),
+        );
+      }
+    } else {
+      // Der aktive Spieler hat nicht gewonnen, also ist der nächste dran
+      // War der aktive Spieler der letzte in der Runde?
+      if (activePlayer < numberOfPlayers - 1) {
+        // Er war nicht der letzte Spieler, die Runde geht normal weiter
+        activePlayer += 1;
+      } else {
+        // Er war der letzte Spieler, die nächste Runde beginnt und der erste Spieler darf wieder
+        // Dazu muss zuerst die Runden Liste für alle Spieler erweitert werden
+        print("Growing Rounds");
+        for (int player = 0; player < playerScoresByRound.length; player++) {
+          playerScoresByRound[player][activeSet][activeLeg].add(List.generate(
+            // Runde in Leg
+              3,
+                  (indexB) => List.from([0, 1]),
+              growable: true));
+        }
+        // nächste runde und erster Spieler
+        activeRound += 1;
         activePlayer = 0;
       }
     }

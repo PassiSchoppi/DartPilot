@@ -5,68 +5,60 @@ import 'package:provider/provider.dart';
 import 'game_data.dart';
 import 'game_point_selector.dart';
 
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => GameData(),
-      child: MyApp(),
-    ),
-  );
-}
+Widget generateNavigationRow(BuildContext context) {
+  GameData gameData = GameData();
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: GameScreen(),
-    );
-  }
-}
-
-Widget generateNavigationRow() {
-  return Consumer<GameData>(
-    builder: (context, gameData, child) {
-      return Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              margin: EdgeInsets.all(4.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.grey.shade400,
-              ),
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: gameData.previousPlayer,
+  return Row(
+    children: [
+      Expanded(
+        flex: 1,
+        child: Container(
+          margin: EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.grey.shade400,
+          ),
+          child: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GameScreen()),
+              );
+              gameData.previousPlayer();
+            },
+          ),
+        ),
+      ),
+      Expanded(
+        flex: 3,
+        child: Container(
+          margin: EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.green.shade400,
+          ),
+          child: TextButton(
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GameScreen()),
+              );
+              gameData.nextPlayer(context);
+            },
+            child: Text(
+              "Nächster Spieler",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
               ),
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              margin: EdgeInsets.all(4.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.green.shade400,
-              ),
-              child: TextButton(
-                onPressed: gameData.nextPlayer,
-                child: Text(
-                  "Nächster Spieler",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    },
+        ),
+      ),
+    ],
   );
 }
 
