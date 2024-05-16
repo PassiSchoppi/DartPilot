@@ -182,7 +182,7 @@ class PointSelector extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           crossAxisCount: 4,
-          childAspectRatio: 2,
+          childAspectRatio: 2.5,
           children: List.generate(numbers.length, (index) {
             return NumberButton(numbers[index]);
           }),
