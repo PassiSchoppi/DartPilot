@@ -32,12 +32,12 @@ Widget generateNavigationRow() {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
             borderRadius: BorderRadius.circular(8.0),
-            color: Colors.green.shade500,
+            color: Colors.green.shade400,
           ),
           child: TextButton(
             onPressed: gameData.nextPlayer,
             child: Text(
-              "Next",
+              "Nächster Spieler",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 24,

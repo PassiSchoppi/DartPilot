@@ -12,6 +12,7 @@ void main() {
         child: MyApp(),
       ),
   );
+  // WidgetsFlutterBinding.ensureInitialized();
 }
 
 class MyApp extends StatelessWidget {
@@ -43,11 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
   GameData gameData = GameData();
   static const MAX_PLAYER_COUNT = 4;
   late List<TextEditingController> controllers = List.generate(MAX_PLAYER_COUNT, (index) => TextEditingController(text: gameData.playerNames[index]));
-
-  void _incrementCounter() {
-    setState(() {
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,6 +254,10 @@ class _MyHomePageState extends State<MyHomePage> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
+                    setState(() {
+                      gameData.calculateScores();
+                      gameData.notifyListeners();
+                    });
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => GameScreen()),

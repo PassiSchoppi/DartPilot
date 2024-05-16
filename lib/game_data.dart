@@ -12,7 +12,24 @@ class GameData with ChangeNotifier {
     if (activePlayer < numberOfPlayers - 1) {
       activePlayer += 1;
     } else {
-      activePlayer = 0;
+      // Hat der aktive Spieler 0 Punkte?
+      calculateScores();
+      if(playerScores[activePlayer] == 0){
+        print("Leg gewonnen!");
+      }else{
+        // Alle Spieler haben jeweils 3 mal gewurfen
+        print("Growing Legs");
+        for (int player = 0; player < playerScoresByRound.length; player++) {
+          playerScoresByRound[player][activeSet].add(List.generate(
+            // Würfe
+              3,
+                  (indexB) => List.from([0, 1])));
+        }
+        activeLeg += 1;
+        activePlayer = 0;
+      }
+
+
     }
     activeThrow = 0;
     calculateScores();
@@ -22,7 +39,8 @@ class GameData with ChangeNotifier {
   void previousPlayer() {
     if (activePlayer > 0) {
       activePlayer -= 1;
-    } else if (activePlayer == 0) {
+    } else if (activePlayer == 0 && activeLeg>0) {
+      activeLeg -= 1;
       activePlayer = numberOfPlayers - 1;
     } else {
       activePlayer = 0;
@@ -36,27 +54,25 @@ class GameData with ChangeNotifier {
     // Clear existing playerScores
     for (int i = 0; i < playerScores.length; i++) {
       print("calculating scores:");
-      print(is301 ? "301" : "501");
       playerScores[i] = is301 ? 301 : 501;
     }
 
     // Iterate over playerScoresByRound and sum up points for each player
     for (int player = 0; player < playerScoresByRound.length; player++) {
-      for (int leg = 0; leg < playerScoresByRound[player].length; leg++) {
-        for (int set = 0;
-            set < playerScoresByRound[player][leg].length;
-            set++) {
+      for (int setty = 0; setty < playerScoresByRound[player].length; setty++) {
+        for (int leggy = 0;
+            leggy < playerScoresByRound[player][setty].length;
+            leggy++) {
           for (int throwIndex = 0;
-              throwIndex < playerScoresByRound[player][leg][set].length;
+              throwIndex < playerScoresByRound[player][setty][leggy].length;
               throwIndex++) {
-
-            if(playerScoresByRound[player][leg][set][throwIndex][0] > 20){
+            if (playerScoresByRound[player][setty][leggy][throwIndex][0] > 20) {
               playerScores[player] -=
-                  playerScoresByRound[player][leg][set][throwIndex][0] * 1;
-            }else {
-              playerScores[player] -= playerScoresByRound[player][leg][set]
+                  playerScoresByRound[player][setty][leggy][throwIndex][0] * 1;
+            } else {
+              playerScores[player] -= playerScoresByRound[player][setty][leggy]
                       [throwIndex][0] *
-                  playerScoresByRound[player][leg][set][throwIndex][1];
+                  playerScoresByRound[player][setty][leggy][throwIndex][1];
             }
           }
         }
@@ -106,8 +122,8 @@ class GameData with ChangeNotifier {
 
   // Aktiver Spieler
   int activePlayer = 0;
-  int activeLeg = 0;   // 0-... infinit
-  int activeSet = 0;   // 0-... bis Sore auf 0
+  int activeLeg = 0; // 0-... infinit
+  int activeSet = 0; // 0-... bis Sore auf 0
   int activeThrow = 0; // 0-2
   DartThrow selectedDart = DartThrow.A;
 

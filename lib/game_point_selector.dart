@@ -85,12 +85,26 @@ class _NumberButtonState extends State<NumberButton> {
 
   @override
   Widget build(BuildContext context) {
-    final Color finalBackgroundColor = ((widget.number == gameData.playerScoresByRound[gameData.activePlayer]
-    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0])||(-widget.number == gameData.playerScoresByRound[gameData.activePlayer]
-    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1]))?Colors.black:(widget.backgrounC ?? Colors.transparent);
-    final Color finalForegroundColor = ((widget.number == gameData.playerScoresByRound[gameData.activePlayer]
-    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0])||(-widget.number == gameData.playerScoresByRound[gameData.activePlayer]
-    [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1]))?Colors.white:Colors.black;
+    final Color finalBackgroundColor = ((widget.number ==
+                gameData.playerScoresByRound[gameData.activePlayer]
+                        [gameData.activeSet][gameData.activeLeg]
+                    [gameData.activeThrow][0]) ||
+            (-widget.number ==
+                gameData.playerScoresByRound[gameData.activePlayer]
+                        [gameData.activeSet][gameData.activeLeg]
+                    [gameData.activeThrow][1]))
+        ? Colors.black
+        : (widget.backgrounC ?? Colors.transparent);
+    final Color finalForegroundColor = ((widget.number ==
+                gameData.playerScoresByRound[gameData.activePlayer]
+                        [gameData.activeSet][gameData.activeLeg]
+                    [gameData.activeThrow][0]) ||
+            (-widget.number ==
+                gameData.playerScoresByRound[gameData.activePlayer]
+                        [gameData.activeSet][gameData.activeLeg]
+                    [gameData.activeThrow][1]))
+        ? Colors.white
+        : Colors.black;
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: OutlinedButton(
@@ -110,21 +124,24 @@ class _NumberButtonState extends State<NumberButton> {
           setState(() {
             if (widget.number < 0) {
               if (gameData.playerScoresByRound[gameData.activePlayer]
-              [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0] <= 20) {
+                          [gameData.activeSet][gameData.activeLeg]
+                      [gameData.activeThrow][0] <=
+                  20) {
                 gameData.playerScoresByRound[gameData.activePlayer]
-                        [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1] =
-                    -widget.number;
+                        [gameData.activeSet][gameData.activeLeg]
+                    [gameData.activeThrow][1] = -widget.number;
               }
             } else if (widget.number > 20) {
               gameData.playerScoresByRound[gameData.activePlayer]
-                      [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0] =
-                  widget.number;
+                      [gameData.activeSet][gameData.activeLeg]
+                  [gameData.activeThrow][0] = widget.number;
               gameData.playerScoresByRound[gameData.activePlayer]
-                  [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][1] = 1;
+                      [gameData.activeSet][gameData.activeLeg]
+                  [gameData.activeThrow][1] = 1;
             } else {
               gameData.playerScoresByRound[gameData.activePlayer]
-                      [gameData.activeSet][gameData.activeLeg][gameData.activeThrow][0] =
-                  widget.number;
+                      [gameData.activeSet][gameData.activeLeg]
+                  [gameData.activeThrow][0] = widget.number;
             }
             gameData.calculateScores();
             gameData.notifyListeners();
@@ -173,9 +190,10 @@ class PointSelector extends StatelessWidget {
         GridView.count(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          crossAxisCount: 4,
+          crossAxisCount: 5,
           childAspectRatio: 2,
           children: [
+            NumberButton(0),
             NumberButton(-2,
                 text: 'x2', backgrounC: Colors.amberAccent.shade100),
             NumberButton(-3, text: 'x3', backgrounC: Colors.orange.shade200),
