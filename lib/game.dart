@@ -1,8 +1,7 @@
+import 'package:dartpilot/game_active_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// Assuming these imports are correct and contain necessary classes
-import 'game_active_stats.dart';
 import 'game_data.dart';
 import 'game_point_selector.dart';
 
@@ -141,3 +140,4 @@ class GameScreen extends StatelessWidget {
     );
   }
 }
+
