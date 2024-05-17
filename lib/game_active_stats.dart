@@ -26,7 +26,7 @@ class ActiveStats extends StatelessWidget {
         children: [
           Consumer<GameData>(builder: (context, gameData, child) {
             return Text(
-              gameData.playerScores[gameData.activePlayer].toString(),
+              gameData.activeScoresByPlayers[gameData.activePlayer].toString(),
               style: TextStyle(
                 fontSize: 96,
                 fontWeight: FontWeight.bold,
@@ -34,7 +34,7 @@ class ActiveStats extends StatelessWidget {
               ),
             );
           }),
-          Text('/501',
+          Text(gameData.is301 ? '/301' : '/501',
               style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
           Flexible(
               child: Padding(
@@ -44,7 +44,7 @@ class ActiveStats extends StatelessWidget {
                     style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
                 Consumer<GameData>(builder: (context, gameData, child) {
                   return Text(
-                    gameData.playerScores[gameData.activePlayer].toString(),
+                    gameData.activeScoresByPlayers[gameData.activePlayer].toString(),
                     style: TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
@@ -55,7 +55,9 @@ class ActiveStats extends StatelessWidget {
             )
           )
         ],
-      )
+      ),
+      Text('Set: '+(gameData.activeSet+1).toString()+'        Leg: '+(gameData.activeLeg+1).toString()+'        Runde: '+(gameData.activeRound+1).toString(),
+          style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
     ]);
   }
 }
