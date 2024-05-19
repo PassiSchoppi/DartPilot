@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dartpilot/game_active_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'game_data.dart';
 import 'game_point_selector.dart';
 
-Widget generateNavigationRow(BuildContext context) {
+Widget generateNavigationRow(BuildContext context, bool fromZwischenScreen) {
   GameData gameData = GameData();
 
   return Row(
@@ -46,7 +48,9 @@ Widget generateNavigationRow(BuildContext context) {
                 context,
                 MaterialPageRoute(builder: (context) => GameScreen()),
               );
-              gameData.nextPlayer(context);
+              if(!fromZwischenScreen) {
+                gameData.nextPlayer(context);
+              }
             },
             child: Text(
               "Nächster Spieler",
@@ -76,7 +80,7 @@ class GameScreen extends StatelessWidget {
               SizedBox(height: 40),
               Consumer<GameData>(builder: (context, gameData, child) {return PointSelector();}),
               SizedBox(height: 40),
-              generateNavigationRow(context),
+              generateNavigationRow(context, false),
               SizedBox(height: 20),
             ],
           ),

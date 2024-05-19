@@ -143,7 +143,7 @@ class GameData with ChangeNotifier {
       }
     }
     notifyListeners();
-    print(playerScoresByLeg);
+    // print(playerScoresByLeg);
   }
 
   void generateScoreByRound() {
