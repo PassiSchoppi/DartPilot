@@ -88,7 +88,7 @@ class GameScreen extends StatelessWidget {
                       return PointSelector();
                     }),
                     SizedBox(height: 40),
-                    generateNavigationRow(),
+                    generateNavigationRow(context, false),
                     SizedBox(height: 20),
                   ],
                 ),

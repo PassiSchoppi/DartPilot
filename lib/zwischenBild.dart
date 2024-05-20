@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 Widget generateTable(GameData gameData, BuildContext context) {
   return SizedBox(
-    height: (gameData.activeSet + 1) * 220,
+    height: (gameData.activeSet + 1) * 420,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
