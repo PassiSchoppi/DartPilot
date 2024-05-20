@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:dartpilot/game_active_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -70,21 +68,68 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 20),
-              Consumer<GameData>(builder: (context, gameData, child) {return ActiveStats();}),
-              SizedBox(height: 40),
-              Consumer<GameData>(builder: (context, gameData, child) {return PointSelector();}),
-              SizedBox(height: 40),
-              generateNavigationRow(context, false),
-              SizedBox(height: 20),
-            ],
-          ),
-        ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Check if the orientation is portrait or landscape
+          bool isPortrait = constraints.maxWidth < constraints.maxHeight;
+
+          if (isPortrait) {
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 20),
+                    Consumer<GameData>(builder: (context, gameData, child) {
+                      return ActiveStats();
+                    }),
+                    SizedBox(height: 40),
+                    Consumer<GameData>(builder: (context, gameData, child) {
+                      return PointSelector();
+                    }),
+                    SizedBox(height: 40),
+                    generateNavigationRow(),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Center(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Consumer<GameData>(builder: (context, gameData, child) {
+                            return ActiveStats();
+                          }),
+                          SizedBox(height: 10),
+                          generateNavigationRow(context, false),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Consumer<GameData>(builder: (context, gameData, child) {
+                            return PointSelector();
+                          }),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
