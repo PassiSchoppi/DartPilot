@@ -22,7 +22,7 @@ Widget generateNavigationRow(BuildContext context, bool fromZwischenScreen) {
           child: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: (){
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => GameScreen()),
               );
