@@ -336,7 +336,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EndScreen()),
+            MaterialPageRoute(builder: (context) => EndScreen( winnerName: 'Leander',)),
           );
         },
         child: Text('End'),

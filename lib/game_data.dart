@@ -1,9 +1,7 @@
-import 'package:dartpilot/game_data.dart';
-import 'package:dartpilot/zwischenBild.dart';
 import 'package:flutter/material.dart';
-import 'package:dartpilot/end.dart';
-import 'package:flutter/cupertino.dart';
+import 'end.dart'; // Vergewissere dich, dass der Pfad korrekt ist
 import 'game_point_selector.dart';
+import 'zwischenBild.dart';
 
 class GameData with ChangeNotifier {
   static final GameData _instance = GameData._internal();
@@ -20,15 +18,17 @@ class GameData with ChangeNotifier {
       // Der Aktive Spieler hat 0 Punkte erreicht und so das Leg gewonnen
       print("Leg gewonnen!");
       // War das das letzte Leg im Set?
-      if(activeLeg == NUMBER_OF_LEGS-1){
+      if (activeLeg == NUMBER_OF_LEGS - 1) {
         // ist es das letzte Set im Spiel?
-        if(activeSet == GameData.NUMBER_OF_SETS-1) {
+        if (activeSet == GameData.NUMBER_OF_SETS - 1) {
           // Das Spiel ist zuende. Gehe zum End Screen
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EndScreen()),
+            MaterialPageRoute(
+                builder: (context) =>
+                    EndScreen(winnerName: playerNames[activePlayer])),
           );
-        }else{
+        } else {
           // Das Spiel ist noch nicht zuende. Das nächste Set beginnt
           activeSet += 1;
           // wir starten natürlich wieder beim ersten Leg und Runde des Sets
@@ -41,7 +41,7 @@ class GameData with ChangeNotifier {
             MaterialPageRoute(builder: (context) => ZwischenBild()),
           );
         }
-      }else{
+      } else {
         // Das war nicht das letzte Leg im Set, also wird das nächste Leg begonnen und erste Runde gesetzt
         activeLeg += 1;
         activeRound = 0;
@@ -64,9 +64,9 @@ class GameData with ChangeNotifier {
         print("Growing Rounds");
         for (int player = 0; player < playerScoresByRound.length; player++) {
           playerScoresByRound[player][activeSet][activeLeg].add(List.generate(
-            // Runde in Leg
+              // Runde in Leg
               3,
-                  (indexB) => List.from([0, 1]),
+              (indexB) => List.from([0, 1]),
               growable: true));
         }
         // nächste runde und erster Spieler
@@ -96,7 +96,12 @@ class GameData with ChangeNotifier {
 
   void calculateScores() {
     // print("calculating scores:");
-    playerScoresByLeg = List.generate(MAX_PLAYER_COUNT, (index) => List.generate(NUMBER_OF_SETS, (index) => List.generate(NUMBER_OF_LEGS, (index) => is301 ? 301 : 501)));
+    playerScoresByLeg = List.generate(
+        MAX_PLAYER_COUNT,
+        (index) => List.generate(
+            NUMBER_OF_SETS,
+            (index) =>
+                List.generate(NUMBER_OF_LEGS, (index) => is301 ? 301 : 501)));
 
     // Iterate over playerScoresByRound and sum up points for each player
     for (int player = 0; player < numberOfPlayers; player++) {
@@ -105,10 +110,11 @@ class GameData with ChangeNotifier {
             leggy < playerScoresByRound[player][setty].length;
             leggy++) {
           // Clear existing playerScores
-          if(setty == activeSet && leggy == activeLeg) {
+          if (setty == activeSet && leggy == activeLeg) {
             activeScoresByPlayers[player] = is301 ? 301 : 501;
           }
-          List<int> counter = List.generate(MAX_PLAYER_COUNT, (index) => is301 ? 301 : 501);
+          List<int> counter =
+              List.generate(MAX_PLAYER_COUNT, (index) => is301 ? 301 : 501);
           for (int round = 0;
               round < playerScoresByRound[player][setty][leggy].length;
               round++) {
@@ -120,12 +126,12 @@ class GameData with ChangeNotifier {
               if (playerScoresByRound[player][setty][leggy][round][throwIndex]
                       [0] >
                   20) {
-                counter[player] -= playerScoresByRound[player][setty]
-                        [leggy][round][throwIndex][0] *
+                counter[player] -= playerScoresByRound[player][setty][leggy]
+                        [round][throwIndex][0] *
                     1;
               } else {
-                counter[player] -= playerScoresByRound[player][setty]
-                        [leggy][round][throwIndex][0] *
+                counter[player] -= playerScoresByRound[player][setty][leggy]
+                        [round][throwIndex][0] *
                     playerScoresByRound[player][setty][leggy][round][throwIndex]
                         [1];
               }
@@ -135,7 +141,7 @@ class GameData with ChangeNotifier {
               counter[player] = befor_this_round;
             }
           }
-          if(setty == activeSet && leggy == activeLeg) {
+          if (setty == activeSet && leggy == activeLeg) {
             activeScoresByPlayers[player] = counter[player];
           }
           playerScoresByLeg[player][setty][leggy] = counter[player];
@@ -184,7 +190,10 @@ class GameData with ChangeNotifier {
   static const NUMBER_OF_SETS = 3;
   static const NUMBER_OF_LEGS = 3;
 
-  List<List<List<int>>> playerScoresByLeg = List.generate(MAX_PLAYER_COUNT, (index) => List.generate(NUMBER_OF_SETS, (index) => List.generate(NUMBER_OF_LEGS, (index) => 0)));
+  List<List<List<int>>> playerScoresByLeg = List.generate(
+      MAX_PLAYER_COUNT,
+      (index) => List.generate(NUMBER_OF_SETS,
+          (index) => List.generate(NUMBER_OF_LEGS, (index) => 0)));
 
   // Anzahl der Spieler
   int numberOfPlayers = 1;
@@ -199,7 +208,8 @@ class GameData with ChangeNotifier {
   int activeThrow = 0; // 0-2  Drei Würfe pro Spieler pro Runde
   DartThrow selectedDart = DartThrow.A;
 
-  List<int> activeScoresByPlayers = List.generate(MAX_PLAYER_COUNT, (index) => 0);
+  List<int> activeScoresByPlayers =
+      List.generate(MAX_PLAYER_COUNT, (index) => 0);
   // Spieler Sets Legs Wurf [Punkte Multiplikator]
   // MAX     grow grow  3   1x
   List<List<List<List<List<List<int>>>>>> playerScoresByRound = List.generate(
