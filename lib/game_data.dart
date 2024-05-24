@@ -22,7 +22,7 @@ class GameData with ChangeNotifier {
         // ist es das letzte Set im Spiel?
         if (activeSet == GameData.NUMBER_OF_SETS - 1) {
           // Das Spiel ist zuende. Gehe zum End Screen
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) =>
@@ -36,7 +36,7 @@ class GameData with ChangeNotifier {
           activeRound = 0;
           activePlayer = 0;
           // Der Zwischen Bildschirm wird angezeigt
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => ZwischenBild()),
           );
@@ -47,7 +47,7 @@ class GameData with ChangeNotifier {
         activeRound = 0;
         activePlayer = 0;
         // Der Zwischen Bildschirm wird angezeigt
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => ZwischenBild()),
         );
@@ -81,17 +81,51 @@ class GameData with ChangeNotifier {
   }
 
   void previousPlayer() {
-    if (activePlayer > 0) {
-      activePlayer -= 1;
-    } else if (activePlayer == 0 && activeLeg > 0) {
-      activeLeg -= 1;
-      activePlayer = numberOfPlayers - 1;
-    } else {
-      activePlayer = 0;
+    // Roll back the throw to the previous one
+    activeThrow = (activeThrow - 1 + 3) % 3;
+
+    // Roll back the active player if we're on the first throw
+    if (activeThrow == 2) {
+      if (activePlayer > 0) {
+        activePlayer -= 1;
+      } else {
+        // If we're at the first player, we need to roll back the round or leg
+        if (activeRound > 0) {
+          activeRound -= 1;
+          activePlayer = numberOfPlayers - 1;
+        } else {
+          if (activeLeg > 0) {
+            activeLeg -= 1;
+            activeRound = getNumberOfRoundsForLeg(activeLeg) - 1;
+            activePlayer = numberOfPlayers - 1;
+          } else {
+            if (activeSet > 0) {
+              activeSet -= 1;
+              activeLeg = NUMBER_OF_LEGS - 1;
+              activeRound = getNumberOfRoundsForLeg(activeLeg) - 1;
+              activePlayer = numberOfPlayers - 1;
+            } else {
+              // If we are at the very first set, leg, and round, we stay there
+              activeThrow = 0;
+              activePlayer = 0;
+              activeRound = 0;
+              activeLeg = 0;
+              activeSet = 0;
+            }
+          }
+        }
+      }
     }
-    activeThrow = 2;
+
+    // Update scores and notify listeners
     calculateScores();
     notifyListeners();
+  }
+
+  int getNumberOfRoundsForLeg(int leg) {
+    // Assuming you have a way to determine the number of rounds per leg.
+    // This function should be implemented based on your game logic.
+    return playerScoresByRound[0][activeSet][leg].length;
   }
 
   void calculateScores() {
