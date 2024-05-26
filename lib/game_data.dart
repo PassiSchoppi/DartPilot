@@ -3,6 +3,8 @@ import 'end.dart'; // Vergewissere dich, dass der Pfad korrekt ist
 import 'game_point_selector.dart';
 import 'zwischenBild.dart';
 
+
+
 class GameData with ChangeNotifier {
   static final GameData _instance = GameData._internal();
 
@@ -135,7 +137,7 @@ class GameData with ChangeNotifier {
         (index) => List.generate(
             NUMBER_OF_SETS,
             (index) =>
-                List.generate(NUMBER_OF_LEGS, (index) => is301 ? 301 : 501)));
+                List.generate(NUMBER_OF_LEGS, (index) => gameMode)));
 
     // Iterate over playerScoresByRound and sum up points for each player
     for (int player = 0; player < numberOfPlayers; player++) {
@@ -145,10 +147,10 @@ class GameData with ChangeNotifier {
             leggy++) {
           // Clear existing playerScores
           if (setty == activeSet && leggy == activeLeg) {
-            activeScoresByPlayers[player] = is301 ? 301 : 501;
+            activeScoresByPlayers[player] = gameMode;
           }
           List<int> counter =
-              List.generate(MAX_PLAYER_COUNT, (index) => is301 ? 301 : 501);
+              List.generate(MAX_PLAYER_COUNT, (index) => gameMode);
           for (int round = 0;
               round < playerScoresByRound[player][setty][leggy].length;
               round++) {
@@ -219,7 +221,7 @@ class GameData with ChangeNotifier {
 
   // Spielmodus
   bool isSingle = true;
-  bool is301 = true;
+  int gameMode = 501;
   static const MAX_PLAYER_COUNT = 4;
   static const NUMBER_OF_SETS = 3;
   static const NUMBER_OF_LEGS = 3;

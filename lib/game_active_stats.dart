@@ -34,7 +34,7 @@ class ActiveStats extends StatelessWidget {
               ),
             );
           }),
-          Text(gameData.is301 ? '/301' : '/501',
+          Text('/'+gameData.gameMode.toString(),
               style: TextStyle(fontSize: 24, fontStyle: FontStyle.italic)),
           Flexible(
               child: Padding(

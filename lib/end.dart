@@ -19,17 +19,17 @@ class EndScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              '$winnerName\nWins!',
+              '$winnerName\nhat gewonnen!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 48,
                 fontWeight: FontWeight.bold,
                 color: Colors.orange,
                 shadows: [
                   Shadow(
                     blurRadius: 10.0,
                     color: Colors.black54,
-                    offset: Offset(5.0, 5.0),
+                    offset: Offset(2.0, 2.0),
                   ),
                 ],
               ),

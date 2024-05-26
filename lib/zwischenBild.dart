@@ -35,51 +35,49 @@ Widget generateTable(GameData gameData, BuildContext context) {
           itemCount: GameData
               .NUMBER_OF_SETS, // Assuming all players have the same number of sets
           itemBuilder: (BuildContext context, int set_index) {
-            if (set_index < gameData.activeSet + 1) {
-              // Check if the current row is odd or even to apply different background colors
-              final Color? backgroundColor =
-                  set_index % 2 == 0 ? Colors.grey[200] : Colors.white;
-              return Container(
-                color: backgroundColor,
-                child: Row(
-                  children: [
-                    // Set number
-                    Container(
-                      width: 80, // Adjust width as needed
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Set ${set_index + 1}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
-                      ),
+            // Check if the current row is odd or even to apply different background colors
+            final Color? backgroundColor =
+                set_index % 2 == 0 ? Colors.grey[200] : Colors.white;
+            return Container(
+              color: backgroundColor,
+              child: Row(
+                children: [
+                  // Set number
+                  Container(
+                    width: 80, // Adjust width as needed
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Set ${set_index + 1}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 24),
                     ),
-                    // Player scores for each leg
-                    for (var player_id = 0;
-                        player_id < gameData.numberOfPlayers;
-                        player_id++)
-                      Expanded(
-                        child: Column(
-                          children: [
-                            for (var setScores in gameData
-                                .playerScoresByLeg[player_id][set_index])
-                              Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        color: setScores == 0
-                                            ? Colors.green
-                                            : Colors.black26),
-                                    setScores.toString()),
-                              ),
-                          ],
-                        ),
-                      )
-                  ],
-                ),
-              );
-            }
+                  ),
+                  // Player scores for each leg
+                  for (var player_id = 0;
+                      player_id < gameData.numberOfPlayers;
+                      player_id++)
+                    Expanded(
+                      child: Column(
+                        children: [
+                          for (var setScores in gameData
+                              .playerScoresByLeg[player_id][set_index])
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: setScores == 0
+                                          ? Colors.green
+                                          : Colors.black26),
+                                  setScores.toString()),
+                            ),
+                        ],
+                      ),
+                    )
+                ],
+              ),
+            );
           }),
     ],
   );

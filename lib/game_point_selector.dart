@@ -132,12 +132,23 @@ class _NumberButtonState extends State<NumberButton> {
               if (gameData.playerScoresByRound[gameData.activePlayer]
                           [gameData.activeSet][gameData.activeLeg]
                       [gameData.activeRound][gameData.activeThrow][0] <=
-                  20) {
+                  20 && gameData.playerScoresByRound[gameData.activePlayer]
+              [gameData.activeSet][gameData.activeLeg]
+              [gameData.activeRound][gameData.activeThrow][0] > 0) {
                 gameData.playerScoresByRound[gameData.activePlayer]
                             [gameData.activeSet][gameData.activeLeg]
                         [gameData.activeRound][gameData.activeThrow][1] =
                     -widget.number;
               }
+            } else if (widget.number == 0) {
+              gameData.playerScoresByRound[gameData.activePlayer]
+              [gameData.activeSet][gameData.activeLeg]
+              [gameData.activeRound][gameData.activeThrow][1] =
+              1;
+              gameData.playerScoresByRound[gameData.activePlayer]
+              [gameData.activeSet][gameData.activeLeg]
+              [gameData.activeRound][gameData.activeThrow][0] =
+                  widget.number;
             } else if (widget.number > 20) {
               gameData.playerScoresByRound[gameData.activePlayer]
                           [gameData.activeSet][gameData.activeLeg]

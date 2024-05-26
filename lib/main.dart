@@ -226,16 +226,34 @@ class _MyHomePageState extends State<MyHomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(height: 10),
         ElevatedButton(
           onPressed: () {
             setState(() {
-              gameData.is301 = true;
+              gameData.gameMode = 101;
             });
             gameData.calculateScores();
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: gameData.is301 ? Colors.blue[100] : Colors.grey[300],
+            backgroundColor: (gameData.gameMode == 101) ? Colors.blue[100] : Colors.grey[300],
+          ),
+          child: Text(
+            '101',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 30.0,
+            ),
+          ),
+        ),
+        SizedBox(width: 20),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              gameData.gameMode = 301;
+            });
+            gameData.calculateScores();
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: (gameData.gameMode == 301) ? Colors.blue[100] : Colors.grey[300],
           ),
           child: Text(
             '301',
@@ -249,12 +267,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
           onPressed: () {
             setState(() {
-              gameData.is301 = false;
+              gameData.gameMode = 501;
             });
             gameData.calculateScores();
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: !gameData.is301 ? Colors.blue[100] : Colors.grey[300],
+            backgroundColor: (gameData.gameMode == 501) ? Colors.blue[100] : Colors.grey[300],
           ),
           child: Text(
             '501',
