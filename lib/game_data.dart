@@ -3,8 +3,6 @@ import 'end.dart'; // Vergewissere dich, dass der Pfad korrekt ist
 import 'game_point_selector.dart';
 import 'zwischenBild.dart';
 
-
-
 class GameData with ChangeNotifier {
   static final GameData _instance = GameData._internal();
 
@@ -17,23 +15,25 @@ class GameData with ChangeNotifier {
     calculateScores();
 
     if (activeScoresByPlayers[activePlayer] == 0) {
-      // Der Aktive Spieler hat 0 Punkte erreicht und so das Leg gewonnen
+      // Der aktive Spieler hat 0 Punkte erreicht und so das Leg gewonnen
       print("Leg gewonnen!");
-      // War das das letzte Leg im Set?
-      if (activeLeg == NUMBER_OF_LEGS - 1) {
-        // ist es das letzte Set im Spiel?
-        if (activeSet == GameData.NUMBER_OF_SETS - 1) {
-          // Das Spiel ist zuende. Gehe zum End Screen
+
+      // Hat der aktive Spieler genug Legs gewonnen, um das Set zu gewinnen?
+      if (legsWonByPlayers[activePlayer][activeSet] == LEGS_TO_WIN_SET) {
+        // War das das letzte Set im Spiel?
+        if (activeSet == NUMBER_OF_SETS - 1) {
+          // Das Spiel ist zu Ende. Gehe zum End Screen
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    EndScreen(winnerName: playerNames[activePlayer])),
+              builder: (context) =>
+                  EndScreen(winnerName: playerNames[activePlayer]),
+            ),
           );
         } else {
-          // Das Spiel ist noch nicht zuende. Das nächste Set beginnt
+          // Das Spiel ist noch nicht zu Ende. Das nächste Set beginnt
           activeSet += 1;
-          // wir starten natürlich wieder beim ersten Leg und Runde des Sets
+          // Wir starten natürlich wieder beim ersten Leg und Runde des Sets
           activeLeg = 0;
           activeRound = 0;
           activePlayer = 0;
@@ -62,21 +62,22 @@ class GameData with ChangeNotifier {
         activePlayer += 1;
       } else {
         // Er war der letzte Spieler, die nächste Runde beginnt und der erste Spieler darf wieder
-        // Dazu muss zuerst die Runden Liste für alle Spieler erweitert werden
+        // Dazu muss zuerst die Rundenliste für alle Spieler erweitert werden
         print("Growing Rounds");
         for (int player = 0; player < playerScoresByRound.length; player++) {
           playerScoresByRound[player][activeSet][activeLeg].add(List.generate(
-              // Runde in Leg
-              3,
-              (indexB) => List.from([0, 1]),
-              growable: true));
+            // Runde in Leg
+            3,
+            (indexB) => List.from([0, 1]),
+            growable: true,
+          ));
         }
-        // nächste runde und erster Spieler
+        // Nächste Runde und erster Spieler
         activeRound += 1;
         activePlayer = 0;
       }
     }
-    // der aktuelle Wurf wird zu 1/3 gesetzt
+    // Der aktuelle Wurf wird zu 1/3 gesetzt
     activeThrow = 0;
     calculateScores();
     notifyListeners();
@@ -131,13 +132,18 @@ class GameData with ChangeNotifier {
   }
 
   void calculateScores() {
-    // print("calculating scores:");
+    // Initialize the playerScoresByLeg structure
     playerScoresByLeg = List.generate(
-        MAX_PLAYER_COUNT,
-        (index) => List.generate(
-            NUMBER_OF_SETS,
-            (index) =>
-                List.generate(NUMBER_OF_LEGS, (index) => gameMode)));
+      MAX_PLAYER_COUNT,
+      (index) => List.generate(
+        NUMBER_OF_SETS,
+        (index) => List.generate(NUMBER_OF_LEGS, (index) => gameMode),
+      ),
+    );
+
+    // Reset legsWonByPlayers for recalculation
+    legsWonByPlayers = List.generate(
+        numberOfPlayers, (player) => List.generate(NUMBER_OF_SETS, (set) => 0));
 
     // Iterate over playerScoresByRound and sum up points for each player
     for (int player = 0; player < numberOfPlayers; player++) {
@@ -154,7 +160,7 @@ class GameData with ChangeNotifier {
           for (int round = 0;
               round < playerScoresByRound[player][setty][leggy].length;
               round++) {
-            int befor_this_round = counter[player];
+            int before_this_round = counter[player];
             for (int throwIndex = 0;
                 throwIndex <
                     playerScoresByRound[player][setty][leggy][round].length;
@@ -172,15 +178,20 @@ class GameData with ChangeNotifier {
                         [1];
               }
             }
-            // Wenn zu viele Punkte gewurfen wurden zählt das entsprechende Leg nicht
+            // Wenn zu viele Punkte geworfen wurden, zählt das entsprechende Leg nicht
             if (counter[player] < 0) {
-              counter[player] = befor_this_round;
+              counter[player] = before_this_round;
             }
           }
           if (setty == activeSet && leggy == activeLeg) {
             activeScoresByPlayers[player] = counter[player];
           }
           playerScoresByLeg[player][setty][leggy] = counter[player];
+
+          // Check if the player has won this leg
+          if (counter[player] == 0) {
+            legsWonByPlayers[player][setty] += 1;
+          }
         }
       }
     }
@@ -223,8 +234,10 @@ class GameData with ChangeNotifier {
   bool isSingle = true;
   int gameMode = 501;
   static const MAX_PLAYER_COUNT = 4;
-  static const NUMBER_OF_SETS = 3;
-  static const NUMBER_OF_LEGS = 3;
+  static const LEGS_TO_WIN_SET =
+      3; // Anzahl der gewonnenen Legs, um ein Set zu gewinnen
+  static const NUMBER_OF_LEGS = 5; // Anzahl der Legs pro Set
+  static const NUMBER_OF_SETS = 3; // Anzahl der Sets pro Spiel
 
   List<List<List<int>>> playerScoresByLeg = List.generate(
       MAX_PLAYER_COUNT,
@@ -246,6 +259,8 @@ class GameData with ChangeNotifier {
 
   List<int> activeScoresByPlayers =
       List.generate(MAX_PLAYER_COUNT, (index) => 0);
+  List<List<int>> legsWonByPlayers = List.generate(
+      MAX_PLAYER_COUNT, (index) => List.generate(NUMBER_OF_SETS, (index) => 0));
   // Spieler Sets Legs Wurf [Punkte Multiplikator]
   // MAX     grow grow  3   1x
   List<List<List<List<List<List<int>>>>>> playerScoresByRound = List.generate(
