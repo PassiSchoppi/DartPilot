@@ -41,7 +41,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GameData gameData = GameData();
-  static const MAX_PLAYER_COUNT = 4;
+  static const MAX_PLAYER_COUNT = 6;
   late List<TextEditingController> controllers = List.generate(MAX_PLAYER_COUNT, (index) => TextEditingController(text: gameData.playerNames[index]));
 
   @override

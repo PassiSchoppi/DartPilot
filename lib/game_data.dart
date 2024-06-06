@@ -233,7 +233,7 @@ class GameData with ChangeNotifier {
   // Spielmodus
   bool isSingle = true;
   int gameMode = 501;
-  static const MAX_PLAYER_COUNT = 4;
+  static const MAX_PLAYER_COUNT = 6;
   static const LEGS_TO_WIN_SET =
       3; // Anzahl der gewonnenen Legs, um ein Set zu gewinnen
   static const NUMBER_OF_LEGS = 5; // Anzahl der Legs pro Set
